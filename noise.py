@@ -3,8 +3,6 @@ import time
 import random
 import string
 
-f = open("data.txt", "w")
-
 size = 5000
 
 def write_random_data():
@@ -15,16 +13,14 @@ def write_random_data():
 
 def write_bytes(b):
   s = ""
-  print("byte to write: " + str(b))
+  print("playing: " + str(bin(b)[2:]).rjust(8, '0') + " (" + str(b) + ")")
   for i in range(0, size):
     s = s + str(b)
   return s
 
-s = write_bytes(0b100101)
-f.write(s)
-f.close()
-
-start_time = time.time()
-os.system("cat data.txt | padsp tee /dev/audio > /dev/null")
-end_time = time.time()
-print("played during: " + str(end_time - start_time))
+for i in range(0, 255):
+  s = write_bytes(i)
+  f = open("data.txt", "w")
+  f.write(s)
+  os.system("cat data.txt | padsp tee /dev/audio > /dev/null")
+  f.close()
